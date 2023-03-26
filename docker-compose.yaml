@@ -1,3 +1,4 @@
+name: phygitalism
 services:
   web-service:
     build:

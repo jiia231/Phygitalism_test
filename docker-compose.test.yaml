@@ -1,3 +1,4 @@
+name: phygitalism-test
 services:
   web-service:
     build:
