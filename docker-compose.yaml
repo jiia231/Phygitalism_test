@@ -44,9 +44,3 @@ services:
 
 volumes:
   db_data:
-
-# docker-compose --env-file ./.env up -d --build
-# docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml --env-file ./.env up -d --build
-
-
-# docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up -d --build

@@ -1,11 +1,11 @@
 from __future__ import with_statement
 
 import os
-
-from alembic import context
-from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
+from sqlalchemy import engine_from_config, pool
+
+from alembic import context
 from app.db.base import Base
 
 # this is the Alembic Config object, which provides
@@ -35,8 +35,8 @@ def get_url():
     user = os.getenv("POSTGRES_USER", "admin")
     password = os.getenv("POSTGRES_PASSWORD", "somepass")
     server = os.getenv("POSTGRES_SERVER", "localhost")
-    TEST_MODE = os.getenv("TEST_MODE", 'False')
-    if TEST_MODE == 'True':
+    TEST_MODE = os.getenv("TEST_MODE", "False")
+    if TEST_MODE == "True":
         db = "postgres"
     else:
         db = os.getenv("POSTGRES_DB", "app")
@@ -74,7 +74,9 @@ def run_migrations_online():
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = get_url()
     connectable = engine_from_config(
-        configuration, prefix="sqlalchemy.", poolclass=pool.NullPool,
+        configuration,
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
     )
 
     with connectable.connect() as connection:
