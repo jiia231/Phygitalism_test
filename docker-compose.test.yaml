@@ -1,0 +1,21 @@
+services:
+  web-service:
+    build:
+      context: backend
+      target: test
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - SERVER_NAME=${SERVER_NAME:-backend}
+      - SERVER_HOST=${SERVER_HOST:-https://example.com}
+      - PROJECT_NAME=${PROJECT_NAME:-backend}
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8000}
+      - POSTGRES_SERVER=${DB_SERVER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASS:-somepass}
+      - POSTGRES_USER=${DB_USER:-admin}
+      - POSTGRES_DB=postgres
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    restart: no

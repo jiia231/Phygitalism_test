@@ -1,0 +1,52 @@
+services:
+  web-service:
+    build:
+      context: backend
+      target: production
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - SERVER_NAME=${SERVER_NAME:-backend}
+      - SERVER_HOST=${SERVER_HOST:-https://example.com}
+      - PROJECT_NAME=${PROJECT_NAME:-backend}
+      - HOST=${HOST:-0.0.0.0}
+      - PORT=${PORT:-8000}
+      - POSTGRES_SERVER=${DB_SERVER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME:-app}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/configs:/etc/nginx/conf.d:ro
+    ports:
+      - "80:80"
+    depends_on:
+      - web-service
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:14.7-alpine
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASS:-somepass}
+      - POSTGRES_USER=${DB_USER:-admin}
+      - POSTGRES_DB=${DB_NAME:-app}
+    ports:
+      - '${DB_EXT_PORT:-5432}:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+
+# docker-compose --env-file ./.env up -d --build
+# docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml --env-file ./.env up -d --build
+
+
+# docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up -d --build
